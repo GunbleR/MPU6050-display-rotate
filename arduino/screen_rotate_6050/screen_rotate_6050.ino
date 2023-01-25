@@ -3,11 +3,14 @@
 #include <Adafruit_MPU6050.h>
 #include <Adafruit_Sensor.h>
 #include <Wire.h>
- 
+
+////////////////////////
+///// config  //////////
 
 const int dead_zone = 1;//(input the dead-zone to prevent constant flipping when diagonal)
 
-
+/// config end ////
+///////////////////
 
 Adafruit_MPU6050 mpu;
 int calc_var, i=0;
