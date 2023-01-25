@@ -1,5 +1,5 @@
 
-# MPU6050-display-rotate<br />
+# MPU6050-display-rotate Guide<br />
 Pc display automatic ratation using arduino and MPU6050 accelerometer<br />
 this project was adapted from [this article](https://www.allaboutcircuits.com/projects/build-an-automatic-computer-display-rotator-with-an-arduino/) to use MPU-6050(GY521) accelerometer instead of MMA7455.<br />
 ## Materials
