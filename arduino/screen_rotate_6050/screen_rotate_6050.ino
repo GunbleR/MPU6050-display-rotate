@@ -5,7 +5,7 @@
 #include <Wire.h>
  
 
-const int dead_zone = 1;//(input double the number for deadzone)
+const int dead_zone = 1;//(input the dead-zone to prevent constant flipping when diagonal)
 
 
 
