@@ -23,8 +23,8 @@ import traceback # for debugging
 
 ardu_port = "COM4"  # arduino COM port
 ardu_baud = 9600    # arduino baud rate
-command = '\".\display.exe" -device 2' # command to execute to rotate with current path
-#command = '\"D:\Program Files\Display_exe\display.exe" -device 2' # command to execute to rotate with absolute path
+command = '\".\display.exe" -device 1' # command to execute to rotate with current path
+#command = '\"D:\Program Files\Display_exe\display.exe" -device 1' # command to execute to rotate with absolute path
 
 
 
