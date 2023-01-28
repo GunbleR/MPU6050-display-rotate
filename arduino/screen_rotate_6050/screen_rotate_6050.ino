@@ -1,5 +1,3 @@
-// Basic demo for accelerometer readings from Adafruit MPU6050
-
 #include <Adafruit_MPU6050.h>
 #include <Adafruit_Sensor.h>
 #include <Wire.h>
@@ -7,14 +5,16 @@
 ////////////////////////
 ///// config  //////////
 
-const int dead_zone = 1;//(input the dead-zone to prevent constant flipping when diagonal)
+const int dead_zone = 1;
 
 /// config end ////
 ///////////////////
 
+
 Adafruit_MPU6050 mpu;
-int calc_var, i=0;
+int calc_var, i = 0;
 int current_position;  //0= undef, 1=x_pos, 2=y_pos, 3=x_nex, 4=y_neg
+int y_pos_count = 0, x_pos_count = 0, y_neg_count = 0, x_neg_count = 0;
 #define LINE_START "Rotate Monitor <"
 #define LINE_END ">"
 
@@ -105,24 +105,24 @@ void setup(void) {
   if ((abs(a.acceleration.x)) - (abs(a.acceleration.y)) > 0) {  //pos=x, neg=y
     if (a.acceleration.x > 0) {
       ///////////x_pos
-          current_position = 1;
-          sendOrientation("X_POS");
-    }else {
-      ///////////x_neg
-          current_position = 3;
-          sendOrientation("X_NEG");
-    }
+      current_position = 1;
+      sendOrientation("X_POS");
     } else {
-      if (a.acceleration.y > 0) {
-        ///////////y_pos
-          current_position = 2;
-          sendOrientation("Y_POS");
-      } else {
-        ///////////Y_neg
-          current_position = 4;
-          sendOrientation("Y_NEG");
-      }
+      ///////////x_neg
+      current_position = 3;
+      sendOrientation("X_NEG");
     }
+  } else {
+    if (a.acceleration.y > 0) {
+      ///////////y_pos
+      current_position = 2;
+      sendOrientation("Y_POS");
+    } else {
+      ///////////Y_neg
+      current_position = 4;
+      sendOrientation("Y_NEG");
+    }
+  }
   delay(200);
 }
 
@@ -138,23 +138,68 @@ void loop() {
     case (3):
       if (dead_zone + (abs(a.acceleration.x)) - (abs(a.acceleration.y)) < 0) {
         if (a.acceleration.y > 0) {
-          current_position = 2;
-          sendOrientation("Y_POS");
+          if (y_pos_count = 2) {
+            current_position = 2;
+            sendOrientation("Y_POS");
+            y_pos_count = 0;
+            x_pos_count = 0;
+            y_neg_count = 0;
+            x_neg_count = 0;
+          } else {
+            y_pos_count++;
+            x_pos_count = 0;
+            y_neg_count = 0;
+            x_neg_count = 0;
+          }
         } else {
-          current_position = 4;
-          sendOrientation("Y_NEG");
+          if (y_neg_count = 2) {
+            current_position = 4;
+            sendOrientation("Y_NEG");
+            y_pos_count = 0;
+            x_pos_count = 0;
+            y_neg_count = 0;
+            x_neg_count = 0;
+          } else {
+            y_pos_count = 0;
+            x_pos_count = 0;
+            y_neg_count++;
+            x_neg_count = 0;
+          }
         }
       }
+
       break;
     case (2):
     case (4):
       if (dead_zone + (abs(a.acceleration.y)) - (abs(a.acceleration.x)) < 0) {
         if (a.acceleration.x > 0) {
-          current_position = 1;
-          sendOrientation("X_POS");
+          if (x_pos_count = 2) {
+            current_position = 1;
+            sendOrientation("X_POS");
+            y_pos_count = 0;
+            x_pos_count = 0;
+            y_neg_count = 0;
+            x_neg_count = 0;
+          } else {
+            y_pos_count = 0;
+            x_pos_count++ ;
+            y_neg_count = 0;
+            x_neg_count = 0;
+          }
         } else {
-          current_position = 3;
-          sendOrientation("X_NEG");
+          if (x_pos_count = 2) {
+            current_position = 3;
+            sendOrientation("X_NEG");
+            y_pos_count = 0;
+            x_pos_count = 0;
+            y_neg_count = 0;
+            x_neg_count = 0;          
+          } else {
+            y_pos_count = 0;
+            x_pos_count = 0;
+            y_neg_count = 0;
+            x_neg_count++ ;            
+          }
         }
       }
       break;
@@ -163,9 +208,9 @@ void loop() {
               // for NOT_SURE, assume Z_POS
       break;
   }
-
   delay(200);
 }
+
 void sendOrientation(String text1) {
 
   Serial.println("change detected");
@@ -173,5 +218,4 @@ void sendOrientation(String text1) {
   Serial.print(LINE_START);
   Serial.print(text1);
   Serial.println(LINE_END);
-
 }
