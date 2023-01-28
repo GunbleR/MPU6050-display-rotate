@@ -5,7 +5,7 @@
 ////////////////////////
 ///// config  //////////
 
-const int dead_zone = 1;
+const int dead_zone = 1; //(input the dead-zone to prevent constant flipping when diagonal)
 
 /// config end ////
 ///////////////////
