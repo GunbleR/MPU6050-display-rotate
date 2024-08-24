@@ -80,6 +80,7 @@ def waitForSerialInit(old_ser):
         if old_ser and old_ser.is_open:
             old_ser.close()
             print("Serial port closed")
+            time.sleep(1)
     except Exception as e:
         print(f"Error closing serial port: {e}")
       
