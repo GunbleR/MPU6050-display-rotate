@@ -66,7 +66,7 @@ def initSerial(dev):
 
 
 
-def waitForSerialInit():
+def waitForSerialInit(old_ser):
 
     # The Arduino can appear on any of these ports on my computer
     # It may appear on different ports for you.
@@ -76,7 +76,13 @@ def waitForSerialInit():
     # The devices listed there are what you should type here
     possibleDevices = [ardu_port] # Windows
     # possibleDevices = ["/dev/ttyACM0","/dev/ttyACM1","/dev/ttyACM2"] # Linux
-
+   try:
+        if old_ser and old_ser.is_open:
+            old_ser.close()
+            print("Serial port closed")
+    except Exception as e:
+        print(f"Error closing serial port: {e}")
+      
     while True:
         for dev in possibleDevices:
             try:
@@ -104,7 +110,7 @@ line_end = ">"
 
 # Ok, let's go.
 # Start by initialising a serial connection to the Arduino
-ser = waitForSerialInit()
+ser = waitForSerialInit(None)
 
 while True:
     try:
@@ -119,7 +125,7 @@ while True:
         print("probably not plugged in")
         time.sleep(5)
         print("trying to init serial again")
-        ser = waitForSerialInit()
+        ser = waitForSerialInit(ser)
         continue
 
 
